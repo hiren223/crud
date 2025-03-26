@@ -103,7 +103,6 @@
                         <input type='checkbox' name='preferenceName[]' value='" . $row['preferenceId'] . "'> </strong>  </td>
                       <td width='19%'  style='font-weight: bold; '  <strong> " . $row['preferenceName'] . " </strong> </td>
                     ";
-                
                                                     $count++;
                                                 }
 
