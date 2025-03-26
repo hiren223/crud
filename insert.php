@@ -84,14 +84,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     echo "<script>
-                alert('User and preferences added successfully!');
+                alert('record added successfully!');
                 window.location.href='add.php';
               </script>";
 
     $stmtPref->close();
   } else {
     echo "<script>
-                alert('Failed to add user');
+                alert('Failed to add record');
                 window.location.href='add.php';
               </script>";
   }

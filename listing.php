@@ -1,6 +1,7 @@
 <?php include "insert.php" ?>
 <?php include "update.php" ?>
 <?php include "delete.php" ?>
+<?php include "search.php" ?>
 
 <html>
 
@@ -98,9 +99,10 @@
     <!--title END-->
     <!--body START-->
     <table width="100%" border="0" cellspacing="10" cellpadding="5" align="center">
-        <tr>
+        <tr id="searchForm">
             <td align="left">
-                <div style=" color: #a75314;font-family: Verdana,Arial,Helvetica,sans-serif;font-size: 12px;">Search : </div><input type="text" size="35" name="textfield" value="Autocomplete"> <select id="filter">
+                <div style=" color: #a75314;font-family: Verdana,Arial,Helvetica,sans-serif;font-size: 12px;">Search : </div>
+                <input type="text" size="35" id="searchInput" name="textfield" value="Autocomplete"> <select id="filter" name="category">
                     <?php
                     $sql = "SELECT * FROM `tbl_pref_master`";
                     $result = mysqli_query($conn, $sql);
@@ -142,7 +144,7 @@
                         $result = mysqli_query($conn, $sql);
 
                         if (!$result) {
-                            die("SQL Error: " . mysqli_error($conn));  
+                            die("SQL Error: " . mysqli_error($conn));
                         }
 
                         while ($row = mysqli_fetch_assoc($result)) {
@@ -151,7 +153,7 @@
             <td><a href='add.php?id=" . $row['user_Id'] . "' style='color: #0A2892;'>" . $row['userName'] . "</a></td>
             <td>" . $row['password'] . "</td>
             <td>" . $row['emailAddress'] . "</td>
-            <td>" . (!empty($row['preferences']) ? $row['preferences'] : 'No Preferences') . "</td>
+            <td>" . $row['preferences']  . "</td>
             <td><a href='delete.php?id=" . $row['user_Id'] . "' onclick='return confirm(\"Are you sure?\")'>DELETE</a></td>
           </tr>";
                         }
@@ -201,6 +203,31 @@
                 }
             });
         })
+    });
+
+
+    document.getElementById("searchForm").addEventListener("submit", function(e) {
+        e.preventDefault(); // Prevent form from refreshing
+
+        let query = document.getElementById("searchInput").value.trim();
+        let category = document.getElementById("filter").value;
+
+        if (query === "") {
+            alert("Please enter a search term.");
+            return;
+        }
+
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", "search.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+        xhr.onload = function() {
+            if (this.status == 200) {
+                document.getElementById("searchResults").innerHTML = this.responseText;
+            }
+        };
+
+        xhr.send("textfield=" + encodeURIComponent(query) + "&category=" + encodeURIComponent(category));
     });
 </script>
 
