@@ -1,0 +1,115 @@
+a {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: #A75314;
+    text-decoration: none;
+}
+
+
+a:active {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: #A75314;
+    text-decoration: none;
+}
+
+a:visited {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: #A75314;
+    text-decoration: none;
+}
+
+a:hover {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: #A75314;
+    text-decoration: underline;
+}
+
+.address {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    color: #A75314;
+    text-decoration: none;
+}
+
+.heading1 {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 30px;
+    color: #0A2892;
+    text-decoration: none;
+}
+
+.heading2 {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    color: #333399;
+    text-decoration: none;
+}
+
+.heading3 {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    color: #336699;
+    text-decoration: none;
+}
+
+.heading4 {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    color: #336699;
+    text-decoration: none;
+    
+}
+
+.heading5 {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    color: #0A2892;
+    text-decoration: none;
+}
+
+.heading6 {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: #0A2892;
+    text-decoration: none;
+}
+
+.heading7 {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    color: #0A2892;
+    text-decoration: none;
+}
+
+.heading8 {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    color: #0A2892;
+    text-decoration: none;
+}
+
+.heading9 {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    color: #A75314;
+    text-decoration: none;
+}
+
+.link {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: #A75314;
+    text-decoration: none;
+}
+
+.link a:visited {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: #D27E00;
+
+}
