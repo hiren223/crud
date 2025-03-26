@@ -29,7 +29,7 @@
     </table>
     <!--title END-->
     <!--body START-->
-    <form action="insert.php"  method="post" enctype="multipart/form-data">
+    <form action="insert.php" method="post" enctype="multipart/form-data">
         <table width="100%" border="0" cellspacing="10" cellpadding="5" align="center">
             <tr>
                 <td>
@@ -77,40 +77,39 @@
                                     <?php
                                     include "dbconnect.php";
 
-                                    // ✅ Fetch Preferences from Database
                                     $sql = "SELECT * FROM `tbl_pref_master`";
                                     $result = mysqli_query($conn, $sql);
 
                                     if (!$result) {
-                                        die("SQL Error: " . mysqli_error($conn)); // Debugging SQL errors
+                                        die("SQL Error: " . mysqli_error($conn));
                                     }
 
-                                    $columns = 4; // ✅ Set number of columns per row
-                                    $count = 0;   // ✅ Counter for tracking column count
+                                    $columns = 4;
+                                    $count = 0;
                                     ?>
 
-                                    <!-- ✅ Styled Table with Multi-Column Layout -->
-                                    <table width="100%" cellspacing="5" class='heading4' cellpadding="5" style="background-color: #FFF2D5;">
+
+                                    <table width="100%" cellspacing="5" class='heading4'  cellpadding="5" style="background-color: #FFF2D5;">
                                         <tbody>
                                             <tr>
                                                 <?php
                                                 while ($row = mysqli_fetch_assoc($result)) {
                                                     // ✅ Open a new row if the count is 0 (start of a new row)
                                                     if ($count % $columns == 0 && $count != 0) {
-                                                        echo "</tr><tr >";
+                                                        echo "</tr><tr  >";
                                                     }
 
-                                                    echo "<td width='20%' style='color: #0A2892; font-weight: bold;'>
-                        <input type='checkbox' name='preferenceName[]' value='" . $row['preferenceId'] . "'>
-                        " . $row['preferenceName'] . "
-                      </td>";
-
+                                                    echo "<td width='5%' style='color: #0A2892;'><strong>&nbsp;
+                        <input type='checkbox' name='preferenceName[]' value='" . $row['preferenceId'] . "'> </strong>  </td>
+                      <td width='19%'  style='font-weight: bold; '  <strong> " . $row['preferenceName'] . " </strong> </td>
+                    ";
+                
                                                     $count++;
                                                 }
 
-                                                // ✅ Close the last row if it's not complete
+
                                                 while ($count % $columns != 0) {
-                                                    echo "<td></td>"; // Empty cells for alignment
+                                                    echo "<td></td>";
                                                     $count++;
                                                 }
                                                 ?>

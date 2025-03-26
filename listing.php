@@ -130,7 +130,6 @@
                         <?php
                         include "dbconnect.php";
 
-                        // ✅ Debugging: Print SQL Errors if Query Fails
                         $sql = "SELECT u.user_Id, u.userName, u.password, u.emailAddress, u.profile_image, 
                COUNT(tp.preferenceId) AS preference_count,
                GROUP_CONCAT(p.preferenceName SEPARATOR ', ') AS preferences
@@ -143,7 +142,7 @@
                         $result = mysqli_query($conn, $sql);
 
                         if (!$result) {
-                            die("SQL Error: " . mysqli_error($conn));  // ✅ Display MySQL error
+                            die("SQL Error: " . mysqli_error($conn));  
                         }
 
                         while ($row = mysqli_fetch_assoc($result)) {
@@ -186,36 +185,6 @@
     </table>
     <!--bottom END-->
 </body>
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const editButtons = document.querySelectorAll(".edit");
-
-        editButtons.forEach((button) => {
-            button.addEventListener("click", (e) => {
-                let tr = e.target.closest("tr");
-
-                // Extract values from table row
-                let userId = tr.getAttribute("data-id"); // If your row has a user ID
-                let fileSrc = tr.querySelector("td:nth-child(1) img").src; // Profile image
-                let name = tr.querySelector("td:nth-child(2)").innerText.trim();
-                let password = tr.querySelector("td:nth-child(3)").innerText.trim();
-                let email = tr.querySelector("td:nth-child(4)").innerText.trim();
-                let preference = tr.querySelector("td:nth-child(5)").innerText.trim();
-
-                // Populate the form fields
-                document.getElementById("userId").value = userId;
-                document.getElementById("filePreview").src = fileSrc;
-                document.getElementById("username").value = name;
-                document.getElementById("password").value = password;
-                document.getElementById("email").value = email;
-                document.getElementById("preference").value = preference;
-
-                console.log("Data loaded into form successfully.");
-            });
-        });
-    });
-</script>
-
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
