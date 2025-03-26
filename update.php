@@ -1,36 +1,47 @@
-<?php 
-
+<?php
 include "dbconnect.php";
 
+if (isset($_POST['submit'])) {
+  $id = $_POST['userId'];
+  $name = $_POST['username'];
+  $password = $_POST['password'];
+  $email = $_POST['email'];
+  $preference = $_POST['preference'];
 
-if (isset($_POST['Submit'])) {
-    // update quiry
-    $name = $_POST['username'];
-    $password = $_POST['password'];
-    $email = $_POST['email'];
-    $file = $_POST['file'];
+  // Handle file upload
   $image = $_FILES['file']['tmp_name'];
-  $imagename = $_FILES['file']['name'];
+  $imageName = $_FILES['file']['name'];
 
-  // $preference= $_POST['preference'];
+  // If a new image is uploaded
+  if ($imageName) {
+    move_uploaded_file($image, "uploads/" . $imageName);
+    $profileImage = "uploads/" . $imageName;
+  } else {
+    // Keep existing image
+    $sql = "SELECT profile_image FROM tbl_user WHERE userId=?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    $profileImage = $row['profile_image'];
+  }
 
-  $sql = "UPDATE `tbl_user` SET `userName` = '$name', `password` = '$password', `confirm_password`= '$password', `email`='$email', `profile_image`= '$imagename' WHERE `tbl_user`.`userName` = $name";
-    $result = mysqli_query($conn, $sql);
+  // Update user data
+  $sql = "UPDATE tbl_user SET userName=?, password=?, email=?, profile_image=? WHERE userId=?";
+  $stmt = $conn->prepare($sql);
+  $stmt->bind_param("ssssi", $name, $password, $email, $profileImage, $id);
 
-    if ($result) {
-        echo "<script>
-     alert('we updated the record successfully')
-      window.location.href='add.php'
-    </script>";
-    } else {
-        echo "<script>
-     alert('we could not update.d the record successfully')
-      window.location.href='add.php'
-    </script>";
-    }
+  if ($stmt->execute()) {
+    echo "<script>
+            alert('Record updated successfully');
+            window.location.href='listing.php';
+        </script>";
+  } else {
+    echo "<script>
+            alert('Update failed');
+            window.location.href='listing.php';
+        </script>";
+  }
 }
-
-
 ?>
-
-

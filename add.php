@@ -1,5 +1,4 @@
 <?php include "insert.php" ?>
-<?php include "skill.php" ?>
 <?php include "update.php" ?>
 <!-- saved from url=(0022)http://internet.e-mail -->
 <html>
@@ -30,7 +29,7 @@
     </table>
     <!--title END-->
     <!--body START-->
-    <form action="insert.php" method="post" enctype="multipart/form-data">
+    <form action="insert.php"  method="post" enctype="multipart/form-data">
         <table width="100%" border="0" cellspacing="10" cellpadding="5" align="center">
             <tr>
                 <td>
@@ -74,113 +73,49 @@
                         </tr>
                         <tr>
                             <td colspan="4" align="left">
-                                <form action="skill.php" id="skillsForm" method="post">
-                                    <table width="100%" border="0" cellspacing="2" cellpadding="2">
-                                        (Please select minimum 3)
+                                <form action="insert.php" id="skillsForm" method="post" onsubmit="return validatePreferences()">
+                                    <?php
+                                    include "dbconnect.php";
+
+                                    // ✅ Fetch Preferences from Database
+                                    $sql = "SELECT * FROM `tbl_pref_master`";
+                                    $result = mysqli_query($conn, $sql);
+
+                                    if (!$result) {
+                                        die("SQL Error: " . mysqli_error($conn)); // Debugging SQL errors
+                                    }
+
+                                    $columns = 4; // ✅ Set number of columns per row
+                                    $count = 0;   // ✅ Counter for tracking column count
+                                    ?>
+
+                                    <!-- ✅ Styled Table with Multi-Column Layout -->
+                                    <table width="100%" cellspacing="5" class='heading4' cellpadding="5" style="background-color: #FFF2D5;">
                                         <tbody>
-                                            <?php
-                                            $sql = "SELECT * FROM `tbl_pref_master`";
-                                            $result = mysqli_query($conn, $sql);
-                                            while ($row = mysqli_fetch_assoc($result)) {
-                                                echo "<tr  class='heading4' bgcolor=' #FFF2D5'><td width='0.6%'>";
-                                                echo ' <strong>&nbsp;
-                                                <input type="checkbox" name="preferences[]">
-                                                </strong></td>
-                                            <td width="16%"><strong color: #0A2892;>' . $row['preferenceName'] . '</strong></td>';
-                                                echo "</td></tr>";
-                                            }
-                                            ?>
+                                            <tr>
+                                                <?php
+                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                    // ✅ Open a new row if the count is 0 (start of a new row)
+                                                    if ($count % $columns == 0 && $count != 0) {
+                                                        echo "</tr><tr >";
+                                                    }
+
+                                                    echo "<td width='20%' style='color: #0A2892; font-weight: bold;'>
+                        <input type='checkbox' name='preferenceName[]' value='" . $row['preferenceId'] . "'>
+                        " . $row['preferenceName'] . "
+                      </td>";
+
+                                                    $count++;
+                                                }
+
+                                                // ✅ Close the last row if it's not complete
+                                                while ($count % $columns != 0) {
+                                                    echo "<td></td>"; // Empty cells for alignment
+                                                    $count++;
+                                                }
+                                                ?>
+                                            </tr>
                                         </tbody>
-                                        <!-- <tr bgcolor="#FFF2D5" class="heading4">
-                                            <td width="5%"><strong>&nbsp;
-                                                    <input type="checkbox" name="preferences[]">
-                                                </strong></td>
-                                            <td width="16%"><strong>C</strong></td>
-                                            <td width="7%"><strong>&nbsp;
-                                                    <input type="checkbox" name="preferences[]">
-                                                </strong></td>
-                                            <td width="19%"><strong>C++</strong></td>
-                                            <td width="5%"><strong>&nbsp;
-                                                    <input type="checkbox" name="preferences[]">
-                                                </strong></td>
-                                            <td width="23%"><strong>VB 5 </strong></td>
-                                            <td width="5%"><strong>&nbsp;
-                                                    <input type="checkbox" name="preferences[]">
-                                                </strong></td>
-                                            <td width="20%"><strong>VB 6 </strong></td>
-                                        </tr>
-                                        <tr bgcolor="#FFF2D5" class="heading4">
-                                            <td><strong>&nbsp;
-                                                    <input type="checkbox" name="preferences[]">
-                                                </strong></td>
-                                            <td><strong>Visual Studio.net </strong></td>
-                                            <td><strong>&nbsp;
-                                                    <input type="checkbox" name="preferences[]">
-                                                </strong></td>
-                                            <td><strong>ASP</strong></td>
-                                            <td><strong>&nbsp;
-                                                    <input type="checkbox" name="preferences[]">
-                                                </strong></td>
-                                            <td><strong>ASP.Net</strong></td>
-                                            <td><strong>&nbsp;
-                                                    <input type="checkbox" name="preferences[]">
-                                                </strong></td>
-                                            <td><strong>C#</strong></td>
-                                        </tr>
-                                        <tr bgcolor="#FFF2D5" class="heading4">
-                                            <td><strong>&nbsp;
-                                                    <input type="checkbox" name="preferences[]">
-                                                </strong></td>
-                                            <td><strong>Oracle</strong></td>
-                                            <td><strong>&nbsp;
-                                                    <input type="checkbox" name="preferences[]">
-                                                </strong></td>
-                                            <td><strong>PHP</strong></td>
-                                            <td><strong>&nbsp;
-                                                    <input type="checkbox" name="preferences[]">
-                                                </strong></td>
-                                            <td><strong>Java</strong></td>
-                                            <td><strong>&nbsp;
-                                                    <input type="checkbox" name="preferences[]">
-                                                </strong></td>
-                                            <td><strong>SQL Server</strong></td>
-                                        </tr>
-                                        <tr bgcolor="#FFF2D5" class="heading4">
-                                            <td><strong>&nbsp;
-                                                    <input type="checkbox" name="preferences[]">
-                                                </strong></td>
-                                            <td><strong>MySQL</strong></td>
-                                            <td><strong>&nbsp;
-                                                    <input type="checkbox" name="preferences[]">
-                                                </strong></td>
-                                            <td><strong>Sybase</strong></td>
-                                            <td><strong>&nbsp;
-                                                    <input type="checkbox" name="preferences[]">
-                                                </strong></td>
-                                            <td><strong>JSP</strong></td>
-                                            <td><strong>&nbsp;
-                                                    <input type="checkbox" name="preferences[]">
-                                                </strong></td>
-                                            <td><strong>PERL</strong></td>
-                                        </tr>
-                                        <tr bgcolor="#FFF2D5" class="heading4">
-                                            <td><strong>&nbsp;
-                                                    <input type="checkbox" name="preferences[]">
-                                                </strong></td>
-                                            <td><strong>Phython</strong></td>
-                                            <td><strong>&nbsp;
-                                                    <input type="checkbox" name="preferences[]">
-                                                </strong></td>
-                                            <td><strong>Cold Fusion</strong></td>
-                                            <td><strong>&nbsp;
-                                                    <input type="checkbox" name="preferences[]">
-                                                </strong></td>
-                                            <td><strong>Windows</strong></td>
-                                            <td><strong>&nbsp;
-                                                    <input type="checkbox" name="preferences[]">
-                                                </strong></td>
-                                            <td><strong>Linux</strong></td>
-                                        </tr> -->
                                     </table>
                                 </form>
                             </td>
@@ -210,7 +145,6 @@
 
 
 <script>
-    
     $(document).ready(function() {
         $("#checkAvailability").click(function() {
             var username = $("#username").val().trim();
@@ -235,19 +169,14 @@
 </script>
 
 <script>
-    $(document).ready(function() {
-        $("#skillsForm").submit(function(event) {
-            if ($("input[name='preferences[]']:checked").length < 3) {
-                event.preventDefault();
-                $("#error").text("Please select at least 3 skills.");
-            }
-        });
-
-        $("#clear").click(function() {
-            $("input[name='preferences[]']").prop("checked", false);
-            $("#error").text("");
-        });
-    });
+    function validatePreferences() {
+        var checkboxes = document.querySelectorAll('.preferenceCheckbox:checked');
+        if (checkboxes.length < 3) {
+            alert("Please select at least 3 preferences.");
+            return false; // Prevent form submission
+        }
+        return true; // Allow form submission
+    }
 </script>
 
 

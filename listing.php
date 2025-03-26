@@ -91,7 +91,7 @@
     <table width="100%" border="0" cellspacing="10" cellpadding="5" align="center">
         <tr>
             <td align="center" valign="middle" bgcolor="#FFF3D7" style="border-bottom: 1px solid #FFE29F;"><B>
-                    <SPANclass=heading11>Sample Test Project </SPANclass=heading11><SPAN class=heading2></SPAN><BR>
+                    <SPAN class=heading11>Sample Test Project </SPAN><SPAN class=heading2></SPAN><BR>
                 </B></td>
         </tr>
     </table>
@@ -106,7 +106,6 @@
                     $result = mysqli_query($conn, $sql);
                     while ($row = mysqli_fetch_assoc($result)) {
                         echo '<option>' . $row['preferenceName'] . '</option>';
-                     
                     }
                     ?>
                 </select> <input type="submit" value="Search" id="username" id="searchBtn" name="Submit">
@@ -129,20 +128,37 @@
                     </thead>
                     <tbody>
                         <?php
-                        $sql = "SELECT * FROM `tbl_user`";
+                        include "dbconnect.php";
+
+                        // ✅ Debugging: Print SQL Errors if Query Fails
+                        $sql = "SELECT u.user_Id, u.userName, u.password, u.emailAddress, u.profile_image, 
+               COUNT(tp.preferenceId) AS preference_count,
+               GROUP_CONCAT(p.preferenceName SEPARATOR ', ') AS preferences
+        FROM tbl_user u
+        LEFT JOIN tbl_preferences tp ON u.user_Id = tp.userId
+        LEFT JOIN tbl_pref_master p ON tp.preferenceId = p.preferenceId
+        GROUP BY u.user_Id
+        HAVING COUNT(tp.preferenceId) >= 3";
+
                         $result = mysqli_query($conn, $sql);
+
+                        if (!$result) {
+                            die("SQL Error: " . mysqli_error($conn));  // ✅ Display MySQL error
+                        }
+
                         while ($row = mysqli_fetch_assoc($result)) {
-                            echo "<tr ><td>";
-                            echo "<img src='" . $row['profile_image'] . "' width='50' height='50' alt='Profile'>";
-                            echo "</td>
-                <td> <a href='add.php' id='edit' class='edit'style='color: #0A2892;' >" . $row['userName'] . " </a></td>
-                <td>" . $row['password'] . "</td>
-                <td>" . $row['emailAddress'] . "</td>
-                <td>" . $row['emailAddress'] . "</td>
-                <td width='6%' colspan='2' align='center'><a href='' id='delete' class='delete'>DELETE</a></td>
-                </tr>";
+                            echo "<tr>
+            <td><img src='" . $row['profile_image'] . "' width='50' height='50' alt='Profile'></td>
+            <td><a href='add.php?id=" . $row['user_Id'] . "' style='color: #0A2892;'>" . $row['userName'] . "</a></td>
+            <td>" . $row['password'] . "</td>
+            <td>" . $row['emailAddress'] . "</td>
+            <td>" . (!empty($row['preferences']) ? $row['preferences'] : 'No Preferences') . "</td>
+            <td><a href='delete.php?id=" . $row['user_Id'] . "' onclick='return confirm(\"Are you sure?\")'>DELETE</a></td>
+          </tr>";
                         }
                         ?>
+
+
                     </tbody>
                 </table>
                 </tbody>
@@ -172,30 +188,29 @@
 </body>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-        const edits = document.getElementsByClassName('edit');
+        const editButtons = document.querySelectorAll(".edit");
 
-        Array.from(edits).forEach((element) => {
-            element.addEventListener("click", (e) => {
-                console.log("edit clicked");
+        editButtons.forEach((button) => {
+            button.addEventListener("click", (e) => {
+                let tr = e.target.closest("tr");
 
-                let tr = e.target.closest("tr"); 
+                // Extract values from table row
+                let userId = tr.getAttribute("data-id"); // If your row has a user ID
+                let fileSrc = tr.querySelector("td:nth-child(1) img").src; // Profile image
+                let name = tr.querySelector("td:nth-child(2)").innerText.trim();
+                let password = tr.querySelector("td:nth-child(3)").innerText.trim();
+                let email = tr.querySelector("td:nth-child(4)").innerText.trim();
+                let preference = tr.querySelector("td:nth-child(5)").innerText.trim();
 
-                // if (!tr) return;
+                // Populate the form fields
+                document.getElementById("userId").value = userId;
+                document.getElementById("filePreview").src = fileSrc;
+                document.getElementById("username").value = name;
+                document.getElementById("password").value = password;
+                document.getElementById("email").value = email;
+                document.getElementById("preference").value = preference;
 
-                let file = tr.getElementsByTagName("td")[0].innerText;
-                let name = tr.getElementsByTagName("td")[1].innerText;
-                let password = tr.getElementsByTagName("td")[2].innerText;
-                let email = tr.getElementsByTagName("td")[3].innerText;
-                let preference = tr.getElementsByTagName("td")[4].innerText;
-
-                console.log(file, name, password, email, preference);
-
-                file.value = file;
-                name.value = name;
-                password.value = password;
-                email.value = email;
-                preference.value = preference;
-                
+                console.log("Data loaded into form successfully.");
             });
         });
     });
