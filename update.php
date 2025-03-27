@@ -11,7 +11,7 @@ if (isset($_POST[' user_Id'])) {
     $password = $_POST['password'];
     $pref = $_POST['preferenceName'];
 
-    $sql = "UPDATE `tbl_user` SET `userName` = '$title', `password` = '$password', `emailAddressil`= '$email', `profile_image`='$imagename' WHERE `tbl_user`.`user_id` = $srno";
+    $sql = "UPDATE `tbl_user` SET `userName` = '$title', `password` = '$password', `emailAddress`= '$email', `profile_image`='$imagename' WHERE `tbl_user`.`user_id` = $srno";
     $result = mysqli_query($conn, $sql);
 
     if ($result) {

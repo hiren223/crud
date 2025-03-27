@@ -38,7 +38,7 @@
                             <td height="30" colspan="3" class="heading7">Add Details</td>
                         </tr>
                         <tr>
-                            
+
                             <td width="49%" align="right">User Name*</td>
                             <td width="4%" align="center">:</td>
                             <td width="47%" align="left"><input name="username" name="usernameedit" id="username" type="text" size="35" onkeyup="checkUsername()" required></td>
@@ -165,6 +165,14 @@
             });
         });
     });
+
+    function submitUpdate() {
+        const form = document.getElementById('updateForm');
+        const formData = new FormData(form);
+        const user = Object.fromEntries(formData.entries());
+
+        updateUser(user);
+    }
 </script>
 
 <script>

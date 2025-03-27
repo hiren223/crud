@@ -189,28 +189,34 @@
 </body>
 
 <script>
-    edits = document.getElementsByClassName('edit');
-    Array.from(edits).forEach((element) => {
-        element.addEventListener("click", (e) => {
-            console.log("edit");
-            tr = e.target.parentNode.parentNode;
-            file = tr.getElementsByTagName("td")[0].innerText;
-            name = tr.getElementsByTagName("td")[1].innerText;
-            email = tr.getElementsByTagName("td")[2].innerText;
-            password = tr.getElementsByTagName("td")[3].innerText;
-            preferenceName = tr.getElementsByTagName("td")[4].innerText;
-            // console.log(file, name, email, password, preferenceName);
+    function updateUser(user) {
+        // 'user' should be an object containing updated details
+        // For example: { user_Id: 1, userName: 'newName', password: 'newPass', emailAddress: 'newEmail', profile_image: 'newImage.jpg' }
 
-            file.value = file;
-            name.value = name;
-            email.value = email;
-            password.value = password;
-            preferenceName.value = preferenceName;
-            name.value = e.target.id;
-            console.log(e.target.id);
+        // Include an action parameter to distinguish this as an update request
+        user.action = 'update';
 
-        });
-    })
+        // Send update request to PHP file (replace 'your_php_file.php' with your actual file)
+        fetch('your_php_file.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams(user)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    // Optionally, reload or refresh the displayed data
+                    location.reload();
+                } else {
+                    alert("Error: " + data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
 
 
     deletes = document.getElementsByClassName('delete');
