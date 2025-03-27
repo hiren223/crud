@@ -150,11 +150,11 @@
                         while ($row = mysqli_fetch_assoc($result)) {
                             echo "<tr>
             <td><img src='" . $row['profile_image'] . "' width='50' height='50' alt='Profile'></td>
-            <td><a href='add.php?id=" . $row['user_Id'] . "' style='color: #0A2892;'>" . $row['userName'] . "</a></td>
+            <td><a href='add.php'" . $row['user_Id'] . " style='color: #0A2892;' class='edit'>" . $row['userName'] . "</a></td>
             <td>" . $row['password'] . "</td>
             <td>" . $row['emailAddress'] . "</td>
             <td>" . $row['preferences']  . "</td>
-            <td><a href='delete.php?id=" . $row['user_Id'] . "' onclick='return confirm(\"Are you sure?\")'>DELETE</a></td>
+            <td><a herf ='#' class='delete'  id=d" . $row['user_Id'] . ">DELETE</a></td>
           </tr>";
                         }
                         ?>
@@ -189,25 +189,47 @@
 </body>
 
 <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        deletes = document.getElementsByClassName('delete');
-        Array.from(deletes).forEach((element) => {
-            element.addEventListener("click", (e) => {
-                console.log("edit");
-                sno = e.target.id;
-                if (confirm("You are sure delete the record")) {
-                    console.log("yes");
-                    window.location = `add.php?delete=${sno}`;
-                } else {
-                    console.log("no");
-                }
-            });
-        })
-    });
+    edits = document.getElementsByClassName('edit');
+    Array.from(edits).forEach((element) => {
+        element.addEventListener("click", (e) => {
+            console.log("edit");
+            tr = e.target.parentNode.parentNode;
+            file = tr.getElementsByTagName("td")[0].innerText;
+            name = tr.getElementsByTagName("td")[1].innerText;
+            email = tr.getElementsByTagName("td")[2].innerText;
+            password = tr.getElementsByTagName("td")[3].innerText;
+            preferenceName = tr.getElementsByTagName("td")[4].innerText;
+            // console.log(file, name, email, password, preferenceName);
+
+            file.value = file;
+            name.value = name;
+            email.value = email;
+            password.value = password;
+            preferenceName.value = preferenceName;
+            name.value = e.target.id;
+            console.log(e.target.id);
+
+        });
+    })
+
+
+    deletes = document.getElementsByClassName('delete');
+    Array.from(deletes).forEach((element) => {
+        element.addEventListener("click", (e) => {
+            console.log("edit");
+            sno = e.target.id.substr(1, );
+            if (confirm("You are sure delete the record")) {
+                console.log("yes");
+                window.location = `listing.php?delete=${sno}`;
+            } else {
+                console.log("no");
+            }
+        });
+    })
 
 
     document.getElementById("searchForm").addEventListener("submit", function(e) {
-        e.preventDefault(); // Prevent form from refreshing
+        e.preventDefault();
 
         let query = document.getElementById("searchInput").value.trim();
         let category = document.getElementById("filter").value;

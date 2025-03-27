@@ -38,6 +38,7 @@
                             <td height="30" colspan="3" class="heading7">Add Details</td>
                         </tr>
                         <tr>
+                            
                             <td width="49%" align="right">User Name*</td>
                             <td width="4%" align="center">:</td>
                             <td width="47%" align="left"><input name="username" name="usernameedit" id="username" type="text" size="35" onkeyup="checkUsername()" required></td>
@@ -89,12 +90,12 @@
                                     ?>
 
 
-                                    <table width="100%" cellspacing="5" class='heading4'  cellpadding="5" style="background-color: #FFF2D5;">
+                                    <table width="100%" cellspacing="5" class='heading4' cellpadding="5" style="background-color: #FFF2D5;">
                                         <tbody>
                                             <tr>
                                                 <?php
                                                 while ($row = mysqli_fetch_assoc($result)) {
-                                                    // ✅ Open a new row if the count is 0 (start of a new row)
+
                                                     if ($count % $columns == 0 && $count != 0) {
                                                         echo "</tr><tr  >";
                                                     }
@@ -171,9 +172,9 @@
         var checkboxes = document.querySelectorAll('.preferenceCheckbox:checked');
         if (checkboxes.length < 3) {
             alert("Please select at least 3 preferences.");
-            return false; // Prevent form submission
+            return false;
         }
-        return true; // Allow form submission
+        return true;
     }
 </script>
 
