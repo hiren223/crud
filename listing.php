@@ -1,5 +1,6 @@
 <?php include "insert.php" ?>
 <?php include "delete.php" ?>
+<?php include "update.php"; ?>
 <?php include "search.php" ?>
 
 <html>
@@ -66,24 +67,13 @@
         inline;
         }
         .pagination
-        a
-        {
-        text-decoration:
-        none
-        !important;
+        a{
+        text-decoration:none !important;
         }
-        .pagination>
-        li:last-child>a,
-        .pagination>li:last-child
-        >
-        span
-        {
-        border-bottom-right-radius:
-        4px;
-        border-top-right-radius:
-        4px;
-        }
-    </style>
+        .pagination>li:last-child>a, .pagination>li:last-child >span{
+        border-bottom-right-radius:4px;
+        border-top-right-radius:4px;
+        }    </style>
 </head>
 
 <body bgcolor="#FFF8E8" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
@@ -133,12 +123,12 @@
                 $sql = "SELECT u.user_Id, u.userName, u.password, u.emailAddress, u.profile_image, 
        COUNT(tp.preferenceId) AS preference_count,
        GROUP_CONCAT(p.preferenceName SEPARATOR ', ') AS preferences
-FROM tbl_user u
-LEFT JOIN tbl_preferences tp ON u.user_Id = tp.userId
-LEFT JOIN tbl_pref_master p ON tp.preferenceId = p.preferenceId
-GROUP BY u.user_Id
-HAVING COUNT(tp.preferenceId) >= 3
-LIMIT $start, $limit";
+        FROM tbl_user u
+        JOIN tbl_preferences tp ON u.user_Id = tp.userId
+        LEFT JOIN tbl_pref_master p ON tp.preferenceId = p.preferenceId
+        GROUP BY u.user_Id
+        HAVING COUNT(tp.preferenceId) >= 3
+        LIMIT $start, $limit";
 
                 $result = mysqli_query($conn, $sql);
 
@@ -159,16 +149,17 @@ LIMIT $start, $limit";
                         </tr>
                     </thead>
                     <tbody>
-                        <?php while ($row = mysqli_fetch_assoc($result)): ?>
-                            <tr>
-                                <td><img src="<?= $row['profile_image'] ?>" width="50" height="50" alt="Profile"></td>
-                                <td><a href="add.php?user_Id=<?= $row['user_Id'] ?>" style="color: #0A2892;" class="edit"><?= $row['userName'] ?></a></td>
-                                <td><?= $row['password'] ?></td>
-                                <td><?= $row['emailAddress'] ?></td>
-                                <td><?= $row['preferences'] ?></td>
-                                <td><a href="#" class="delete" id="d<?= $row['user_Id'] ?>">DELETE</a></td>
-                            </tr>
-                        <?php endwhile; ?>
+                        <?php while ($row = mysqli_fetch_assoc($result))
+                           echo ' <tr>
+                                <td><img src="'. $row['profile_image'] .'" width="50" height="50" alt="Profile"></td>
+                                <td><a href="add.php?user_Id= '.$row['user_Id'] .' " style="color: #0A2892;" class="edit">'. $row['userName'] .'</a></td>
+                                <td>'. $row['password'] .'</td>
+                                <td>'. $row['emailAddress'] .'</td>
+                                <td>'. $row['preferences'] .'</td>
+                                <td><a href="#" class="delete" id="d'. $row['user_Id'] .'">DELETE</a></td>
+                            </tr>'
+                        
+                         ?>
                     </tbody>
                 </table>
 
@@ -194,31 +185,7 @@ LIMIT $start, $limit";
 </body>
 
 <script>
-    function updateUser(user) {
-
-        user.action = 'update';
-
-        fetch('your_php_file.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: new URLSearchParams(user)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert(data.message);
-
-                    location.reload();
-                } else {
-                    alert("Error: " + data.message);
-                }
-            })
-            .catch(error => console.error('Error:', error));
-    }
-
-
+   
 
     deletes = document.getElementsByClassName('delete');
     Array.from(deletes).forEach((element) => {

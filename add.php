@@ -1,5 +1,5 @@
 <?php include "insert.php" ?>
-<!-- saved from url=(0022)http://internet.e-mail -->
+
 <html>
 
 <head>
@@ -35,6 +35,11 @@
                     <table width="70%" border="0" align="center" class="heading6">
                         <tr align="center">
                             <td height="30" colspan="3" class="heading7">Add Details</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="hidden" name="user_Id">
+                            </td>
                         </tr>
                         <tr>
 
