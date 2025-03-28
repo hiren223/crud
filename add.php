@@ -1,5 +1,4 @@
 <?php include "insert.php" ?>
-<?php include "update.php" ?>
 <!-- saved from url=(0022)http://internet.e-mail -->
 <html>
 

@@ -1,6 +1,6 @@
 <?php
-include "update.php";
-session_start();
+// include "update.php";
+// session_start();
 
 
 require_once "dbconnect.php";

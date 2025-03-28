@@ -1,5 +1,4 @@
 <?php include "insert.php" ?>
-<?php include "update.php" ?>
 <?php include "delete.php" ?>
 <?php include "search.php" ?>
 
@@ -117,6 +116,37 @@
         <tr>
             <td colspan="2">
 
+                <?php
+                include "dbconnect.php";
+
+                $limit = 5;
+                $page = isset($_GET['page']) ? $_GET['page'] : 1;
+                $start = ($page - 1) * $limit;
+
+                // Query to count total records
+                $count_query = "SELECT COUNT(*) AS total FROM tbl_user";
+                $count_result = mysqli_query($conn, $count_query);
+                $total_rows = mysqli_fetch_assoc($count_result)['total'];
+                $total_pages = ceil($total_rows / $limit);
+
+                // Fetch paginated results
+                $sql = "SELECT u.user_Id, u.userName, u.password, u.emailAddress, u.profile_image, 
+       COUNT(tp.preferenceId) AS preference_count,
+       GROUP_CONCAT(p.preferenceName SEPARATOR ', ') AS preferences
+FROM tbl_user u
+LEFT JOIN tbl_preferences tp ON u.user_Id = tp.userId
+LEFT JOIN tbl_pref_master p ON tp.preferenceId = p.preferenceId
+GROUP BY u.user_Id
+HAVING COUNT(tp.preferenceId) >= 3
+LIMIT $start, $limit";
+
+                $result = mysqli_query($conn, $sql);
+
+                if (!$result) {
+                    die("SQL Error: " . mysqli_error($conn));
+                }
+                ?>
+
                 <table id="myTable" width="100%" border="0" align="center" cellpadding="2" cellspacing="2" class="heading6" style="border:1px solid #FFE29F;">
                     <thead>
                         <tr>
@@ -129,74 +159,45 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php
-                        include "dbconnect.php";
-
-                        $sql = "SELECT u.user_Id, u.userName, u.password, u.emailAddress, u.profile_image, 
-               COUNT(tp.preferenceId) AS preference_count,
-               GROUP_CONCAT(p.preferenceName SEPARATOR ', ') AS preferences
-        FROM tbl_user u
-        LEFT JOIN tbl_preferences tp ON u.user_Id = tp.userId
-        LEFT JOIN tbl_pref_master p ON tp.preferenceId = p.preferenceId
-        GROUP BY u.user_Id
-        HAVING COUNT(tp.preferenceId) >= 3";
-
-                        $result = mysqli_query($conn, $sql);
-
-                        if (!$result) {
-                            die("SQL Error: " . mysqli_error($conn));
-                        }
-
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            echo "<tr>
-            <td><img src='" . $row['profile_image'] . "' width='50' height='50' alt='Profile'></td>
-            <td><a href='add.php'" . $row['user_Id'] . " style='color: #0A2892;' class='edit'>" . $row['userName'] . "</a></td>
-            <td>" . $row['password'] . "</td>
-            <td>" . $row['emailAddress'] . "</td>
-            <td>" . $row['preferences']  . "</td>
-            <td><a herf ='#' class='delete'  id=d" . $row['user_Id'] . ">DELETE</a></td>
-          </tr>";
-                        }
-                        ?>
-
-
+                        <?php while ($row = mysqli_fetch_assoc($result)): ?>
+                            <tr>
+                                <td><img src="<?= $row['profile_image'] ?>" width="50" height="50" alt="Profile"></td>
+                                <td><a href="add.php?user_Id=<?= $row['user_Id'] ?>" style="color: #0A2892;" class="edit"><?= $row['userName'] ?></a></td>
+                                <td><?= $row['password'] ?></td>
+                                <td><?= $row['emailAddress'] ?></td>
+                                <td><?= $row['preferences'] ?></td>
+                                <td><a href="#" class="delete" id="d<?= $row['user_Id'] ?>">DELETE</a></td>
+                            </tr>
+                        <?php endwhile; ?>
                     </tbody>
                 </table>
-                </tbody>
-    </table>
-    </td>
-    </tr>
-    <tr>
-        <td>
-            <ul class="pagination">
-                <li><a href="#">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-            </ul>
-        </td>
-    </tr>
-    </table>
-    <!--body END-->
-    <!--bottom START-->
-    <table width="100%" border="0" cellspacing="10" cellpadding="5" align="center">
-        <TR vAlign=bottom align=left>
-            <TD colSpan=3 height=40><SPAN class=heading4>� Sample project </SPAN><SPAN class=heading3><B></B></SPAN></TD>
-        </TR>
-    </table>
-    <!--bottom END-->
+
+                <!-- Pagination -->
+        <tr>
+            <td>
+                <ul class="pagination">
+                    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                        <li><a href="?page=<?= $i ?>" <?= ($i == $page) ? '"' : '' ?>><?= $i ?></a></li>
+                    <?php endfor; ?>
+                </ul>
+            </td>
+        </tr>
+
+        <!--body END-->
+        <!--bottom START-->
+        <table width="100%" border="0" cellspacing="10" cellpadding="5" align="center">
+            <TR vAlign=bottom align=left>
+                <TD colSpan=3 height=40><SPAN class=heading4>� Sample project </SPAN><SPAN class=heading3><B></B></SPAN></TD>
+            </TR>
+        </table>
+        <!--bottom END-->
 </body>
 
 <script>
     function updateUser(user) {
-        // 'user' should be an object containing updated details
-        // For example: { user_Id: 1, userName: 'newName', password: 'newPass', emailAddress: 'newEmail', profile_image: 'newImage.jpg' }
 
-        // Include an action parameter to distinguish this as an update request
         user.action = 'update';
 
-        // Send update request to PHP file (replace 'your_php_file.php' with your actual file)
         fetch('your_php_file.php', {
                 method: 'POST',
                 headers: {
@@ -208,7 +209,7 @@
             .then(data => {
                 if (data.success) {
                     alert(data.message);
-                    // Optionally, reload or refresh the displayed data
+
                     location.reload();
                 } else {
                     alert("Error: " + data.message);
@@ -234,29 +235,7 @@
     })
 
 
-    document.getElementById("searchForm").addEventListener("submit", function(e) {
-        e.preventDefault();
-
-        let query = document.getElementById("searchInput").value.trim();
-        let category = document.getElementById("filter").value;
-
-        if (query === "") {
-            alert("Please enter a search term.");
-            return;
-        }
-
-        let xhr = new XMLHttpRequest();
-        xhr.open("POST", "search.php", true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-        xhr.onload = function() {
-            if (this.status == 200) {
-                document.getElementById("searchResults").innerHTML = this.responseText;
-            }
-        };
-
-        xhr.send("textfield=" + encodeURIComponent(query) + "&category=" + encodeURIComponent(category));
-    });
 </script>
+
 
 </html>
