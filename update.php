@@ -1,30 +1,35 @@
 <?php
-
 include "dbconnect.php";
 
-if (isset($_POST[' user_Id'])) {
-    // update quiry
-    $srno = $_POST[' user_Id'];
-    $imagename = $_FILES['file']['name'];
-    $name = $_POST['name'];
-    $eamil = $_POST['eamil'];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $userId = $_POST['user_Id'];
+    $username = $_POST['username'];
+    $email = $_POST['email'];
     $password = $_POST['password'];
-    $pref = $_POST['preferenceName'];
+    $preferences = explode(', ', $_POST['preferences']); // Convert string to array
 
-    $sql = "UPDATE `tbl_user` SET `userName` = '$title', `password` = '$password', `emailAddress`= '$email', `profile_image`='$imagename' WHERE `tbl_user`.`user_id` = $srno";
-    $result = mysqli_query($conn, $sql);
+    // Update user details
+    $sql = "UPDATE tbl_user 
+            SET userName='$username', emailAddress='$email', password='$password' 
+            WHERE user_Id='$userId'";
 
-    if ($result) {
-        echo "<script>
-     alert('we updated the record successfully')
-      window.location.href='add.php'
-    </script>";
+    if (mysqli_query($conn, $sql)) {
+        // Delete existing preferences
+        mysqli_query($conn, "DELETE FROM tbl_preferences WHERE userId='$userId'");
+
+        // Insert new preferences
+        foreach ($preferences as $prefName) {
+            $prefQuery = "SELECT preferenceId FROM tbl_pref_master WHERE preferenceName='$prefName'";
+            $prefResult = mysqli_query($conn, $prefQuery);
+            if ($prefRow = mysqli_fetch_assoc($prefResult)) {
+                $preferenceId = $prefRow['preferenceId'];
+                mysqli_query($conn, "INSERT INTO tbl_preferences (userId, preferenceId) VALUES ('$userId', '$preferenceId')");
+            }
+        }
+
+        echo json_encode(["success" => "User updated successfully"]);
     } else {
-        echo "<script>
-     alert('we could not updated the record successfully')
-      window.location.href='add.php'
-    </script>";
+        echo json_encode(["error" => "Update failed"]);
     }
 }
-
 ?>

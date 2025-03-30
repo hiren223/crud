@@ -19,14 +19,12 @@
         });
     </script> -->
     <style type="text/css">
-        <!--
         .heading11 {
             FONT-SIZE: 30px;
             COLOR: #0a2892;
             FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
             TEXT-DECORATION: none
         }
-        -->
         .pagination
         {
         border-radius:4px;
@@ -63,8 +61,7 @@
         }
         .pagination>li
         {
-        display:
-        inline;
+        display:inline;
         }
         .pagination
         a{
@@ -152,7 +149,7 @@
                         <?php while ($row = mysqli_fetch_assoc($result))
                            echo ' <tr>
                                 <td><img src="'. $row['profile_image'] .'" width="50" height="50" alt="Profile"></td>
-                                <td><a href="add.php?user_Id= '.$row['user_Id'] .' " style="color: #0A2892;" class="edit">'. $row['userName'] .'</a></td>
+                                <td><a href="add.php?user_Id='.$row['user_Id'] .' " style="color: #0A2892;" class="edit">'. $row['userName'] .'</a></td>
                                 <td>'. $row['password'] .'</td>
                                 <td>'. $row['emailAddress'] .'</td>
                                 <td>'. $row['preferences'] .'</td>
@@ -185,7 +182,28 @@
 </body>
 
 <script>
-   
+edits = document.getElementsByClassName('edit');
+    Array.from(edits).forEach((element) => {
+        element.addEventListener("click", (e) => {
+            console.log("edit");
+            tr = e.target.parentNode.parentNode;
+            file = tr.getElementsByTagName("td")[0].innerText;
+            name = tr.getElementsByTagName("td")[1].innerText;
+            email = tr.getElementsByTagName("td")[2].innerText;
+            password = tr.getElementsByTagName("td")[3].innerText;
+            preferences = tr.getElementsByTagName("td")[4].innerText;
+            console.log(file, name, password, email, preferences);
+            
+            file.value = file;
+            name.value =name;
+            password.value =password;
+            email.value =email;
+            preferences.value =preferences;
+            user_Id.value = e.target.id;
+            console.log(e.target.id);
+
+        });
+    })
 
     deletes = document.getElementsByClassName('delete');
     Array.from(deletes).forEach((element) => {

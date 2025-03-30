@@ -1,4 +1,5 @@
 <?php include "insert.php" ?>
+<?php include "update.php"; ?>
 
 <html>
 
@@ -36,16 +37,12 @@
                         <tr align="center">
                             <td height="30" colspan="3" class="heading7">Add Details</td>
                         </tr>
-                        <tr>
-                            <td>
-                                <input type="hidden" name="user_Id">
-                            </td>
-                        </tr>
+                       
                         <tr>
 
                             <td width="49%" align="right">User Name*</td>
                             <td width="4%" align="center">:</td>
-                            <td width="47%" align="left"><input name="username" name="usernameedit" id="username" type="text" size="35" onkeyup="checkUsername()" required></td>
+                            <td width="47%" align="left"><input name="username"  id="username" type="text" size="35"  autocomplete="username" onkeyup="checkUsername()" required></td>
                             <td> <input type="button" name="Checkbutton" id="checkAvailability" value="Check Availability" /><br />(ajax based functionality should be written)</td>
                             <td>
                                 <span id="usernameResult"></span>
@@ -54,27 +51,32 @@
                         <tr>
                             <td align="right">Password*</td>
                             <td align="center">:</td>
-                            <td align="left"><input name="password" name="passwordedit" id="password" autocomplete="on" type="password" size="35" required></td>
+                            <td align="left"><input name="password" id="password" autocomplete="new-password" type="password" size="35" required></td>
                         </tr>
                         <tr>
                             <td align="right">Confirm Password*</td>
                             <td align="center">:</td>
-                            <td align="left"><input name="cpassword" name="passwordedit" autocomplete="on" id="cpassword" type="password" size="35" required></td>
+                            <td align="left"><input name="cpassword"  autocomplete="new-password" id="cpassword" type="password" size="35" required></td>
                         </tr>
                         <tr>
                             <td align="right">Email Address*</td>
                             <td align="center">:</td>
-                            <td align="left"><input name="email" name="emailedit" id="email" type="email" size="35" required></td>
+                            <td align="left"><input name="email"  id="email" type="email"  autocomplete="email" size="35" required></td>
                         </tr>
                         <tr>
                             <td align="right">Profile Image*</td>
                             <td align="center">:</td>
-                            <td align="left"><input name="file" name="fileedit" id="file" accept=" .jpeg, .jpg, .png" type="file" size="35" required></td>
+                            <td align="left"><input name="file"  id="file" accept=" .jpeg, .jpg, .png"  autocomplete="file" type="file" size="35" required></td>
                         </tr>
                         <tr>
                             <td align="right"></td>
                             <td align="center"></td>
                             <td align="left">(Jpeg,Jpg,Png, Max Limit:2MB)</td>
+                        </tr>
+                          <tr>
+                            <td>
+                                <input type="hidden" name="user" id="user_id" >
+                            </td>
                         </tr>
                         <tr>
                             <td colspan="4" align="left">
