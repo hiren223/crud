@@ -43,7 +43,7 @@
                             <td width="49%" align="right">User Name*</td>
                             <td width="4%" align="center">:</td>
                             <td width="47%" align="left"><input name="name" id="username" type="text" size="35"
-                                    autocomplete="username" required></td>
+                                    autocomplete="username" required value="<?php echo ($row['userName'])?$row['userName']:'';?>"></td>
                             <td> <input type="button" name="Checkbutton" id="checkAvailability"
                                     value="Check Availability" /><br />(ajax based functionality should be written)</td>
                             <td>
@@ -54,25 +54,25 @@
                             <td align="right">Password*</td>
                             <td align="center">:</td>
                             <td align="left"><input name="password" id="password" autocomplete="new-password"
-                                    type="password" size="35" required></td>
+                                    type="password" size="35" required value="<?php echo ($row['password'])?$row['password']:'';?>"></td>
                         </tr>
                         <tr>
                             <td align="right">Confirm Password*</td>
                             <td align="center">:</td>
                             <td align="left"><input name="cpassword" autocomplete="new-password" id="cpassword"
-                                    type="password" size="35" required></td>
+                                    type="password" size="35" required value="<?php echo ($row['password'])?$row['password']:'';?>"></td>
                         </tr>
                         <tr>
                             <td align="right">Email Address*</td>
                             <td align="center">:</td>
                             <td align="left"><input name="email" id="email" type="email" autocomplete="email" size="35"
-                                    required></td>
+                                    required value="<?php echo ($row['emailAddress'])?$row['emailAddress']:'';?>"></td>
                         </tr>
                         <tr>
                             <td align="right">Profile Image*</td>
                             <td align="center">:</td>
                             <td align="left"><input name="file" id="file" accept=" .jpeg, .jpg, .png"
-                                    autocomplete="file" type="file" size="35" required></td>
+                                    autocomplete="file" type="file" size="35" required value="<?php echo ($row['profile_image'])?$row['profile_image']:'';?>"></td>
                         </tr>
                         <tr>
                             <td align="right"></td>
@@ -119,7 +119,7 @@
                                                     }
 
                                                     echo "<td width='5%' style='color: #0A2892;'><strong>&nbsp;
-                        <input type='checkbox' name='preferenceName[]' value='" . $row['preferenceId'] . "'> </strong>  </td>
+                        <input value='<?php echo "($row['preferenceName'])?$row['preferenceName']:'';"?>' type='checkbox' name='preferenceName[]' value='" . $row['preferenceId'] . "' > </strong>  </td>
                       <td width='19%'  style='font-weight: bold; '  <strong> " . $row['preferenceName'] . " </strong> </td>
                     ";
                                                     $count++;

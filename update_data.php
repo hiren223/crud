@@ -17,6 +17,20 @@ function hashPassword1($password)
   return password_hash($password, PASSWORD_DEFAULT);
 }
 
+if (isset($_GET['user_Id'])) {
+  $sql = "SELECT * FROM  `tbl_user` WHERE `user_id` = ".$_GET['user_Id'];
+  //$stmt = $conn->prepare($sql);
+
+  $result = mysqli_query($conn, $sql);
+    $row = mysqli_fetch_assoc($result);
+    $name = $row['userName'];
+    $password = $row['password'];
+    $cpassword = $row['confirm_password'];
+    $email = $row['emailAddress'];
+    $file = $row['profile_image'];
+    $pref = $row['preferenceName'];
+}
+
 if (isset($_POST['Submit'])) {
 
   $name = sanitizeInput1($_POST['username']);
