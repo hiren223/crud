@@ -36,13 +36,15 @@
                         <tr align="center">
                             <td height="30" colspan="3" class="heading7">Add Details</td>
                         </tr>
-                       
+
                         <tr>
 
                             <td width="49%" align="right">User Name*</td>
                             <td width="4%" align="center">:</td>
-                            <td width="47%" align="left"><input name="username"  id="username" type="text" size="35"  autocomplete="username" onkeyup="checkUsername()" required></td>
-                            <td> <input type="button" name="Checkbutton" id="checkAvailability" value="Check Availability" /><br />(ajax based functionality should be written)</td>
+                            <td width="47%" align="left"><input name="username" id="username" type="text" size="35"
+                                    autocomplete="username" onkeyup="checkUsername()" required></td>
+                            <td> <input type="button" name="Checkbutton" id="checkAvailability"
+                                    value="Check Availability" /><br />(ajax based functionality should be written)</td>
                             <td>
                                 <span id="usernameResult"></span>
                             </td>
@@ -50,39 +52,45 @@
                         <tr>
                             <td align="right">Password*</td>
                             <td align="center">:</td>
-                            <td align="left"><input name="password" id="password" autocomplete="new-password" type="password" size="35" required></td>
+                            <td align="left"><input name="password" id="password" autocomplete="new-password"
+                                    type="password" size="35" required></td>
                         </tr>
                         <tr>
                             <td align="right">Confirm Password*</td>
                             <td align="center">:</td>
-                            <td align="left"><input name="cpassword"  autocomplete="new-password" id="cpassword" type="password" size="35" required></td>
+                            <td align="left"><input name="cpassword" autocomplete="new-password" id="cpassword"
+                                    type="password" size="35" required></td>
                         </tr>
                         <tr>
                             <td align="right">Email Address*</td>
                             <td align="center">:</td>
-                            <td align="left"><input name="email"  id="email" type="email"  autocomplete="email" size="35" required></td>
+                            <td align="left"><input name="email" id="email" type="email" autocomplete="email" size="35"
+                                    required></td>
                         </tr>
                         <tr>
                             <td align="right">Profile Image*</td>
                             <td align="center">:</td>
-                            <td align="left"><input name="file"  id="file" accept=" .jpeg, .jpg, .png"  autocomplete="file" type="file" size="35" required></td>
+                            <td align="left"><input name="file" id="file" accept=" .jpeg, .jpg, .png"
+                                    autocomplete="file" type="file" size="35" required></td>
                         </tr>
                         <tr>
                             <td align="right"></td>
                             <td align="center"></td>
                             <td align="left">(Jpeg,Jpg,Png, Max Limit:2MB)</td>
                         </tr>
-                          <tr>
+                        <tr>
                             <td>
-                                <input type="hidden" name="user" id="user_id" >
+                                <input type="hidden" name="user" id="user_id">
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="4" align="left"><table width="100%"  border="0" cellspacing="2" cellpadding="2">
-			(Please select minimum 3)
-        </td>
                             <td colspan="4" align="left">
-                                <form action="insert.php" id="skillsForm" method="post" onsubmit="return validatePreferences()">
+                                <table width="100%" border="0" cellspacing="2" cellpadding="2">
+                                    (Please select minimum 3)
+                            </td>
+                            <td colspan="4" align="left">
+                                <form action="insert.php" id="skillsForm" method="post"
+                                    onsubmit="return validatePreferences()">
                                     <?php
                                     include "dbconnect.php";
 
@@ -98,7 +106,8 @@
                                     ?>
 
 
-                                    <table width="100%" cellspacing="2" class='heading4' cellpadding="2" style="background-color: #FFF2D5;">
+                                    <table width="100%" cellspacing="2" class='heading4' cellpadding="2"
+                                        style="background-color: #FFF2D5;">
                                         <tbody>
                                             <tr bgcolor="#FFF2D5" class="heading4">
                                                 <?php
@@ -124,27 +133,28 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                            </td>
-                                </form>
                             </td>
-                        </tr>
-                        <tr style="display: flex; justify-content:center;">
-                            <td align="left">&nbsp;</td>
-                            <td align="center">&nbsp;</td>
-                            <td align="left"><input type="submit" name="Submit" onsubmit="return validateForm();" value="Save">&nbsp;&nbsp;
-                                <input type="Reset" name="Reset" value="Reset">&nbsp;&nbsp;
-                                <input type="button" name="button" value="Clear" onClick="history.go(-1);">
-                            </td>
-                        </tr>
-                    </table>
-            </tr>
-        </table>
+    </form>
+    </td>
+    </tr>
+    <tr style="display: flex; justify-content:center;">
+        <td align="left">&nbsp;</td>
+        <td align="center">&nbsp;</td>
+        <td align="left"><input type="submit" name="Submit" onsubmit="return validateForm();" value="Save">&nbsp;&nbsp;
+            <input type="Reset" name="Reset" value="Reset">&nbsp;&nbsp;
+            <input type="button" name="button" value="Clear" onClick="history.go(-1);">
+        </td>
+    </tr>
+    </table>
+    </tr>
+    </table>
     </form>
     <!--body END-->
     <!--bottom START-->
     <table width="100%" border="0" cellspacing="10" cellpadding="5" align="center">
         <TR vAlign=bottom align=left>
-            <TD colSpan=3 height=40><SPAN class=heading4>� Sample project </SPAN><SPAN class=heading3><B></B></SPAN></TD>
+            <TD colSpan=3 height=40><SPAN class=heading4>� Sample project </SPAN><SPAN class=heading3><B></B></SPAN>
+            </TD>
         </TR>
     </table>
     <!--bottom END-->
@@ -152,8 +162,8 @@
 
 
 <script>
-    $(document).ready(function() {
-        $("#checkAvailability").click(function() {
+    $(document).ready(function () {
+        $("#checkAvailability").click(function () {
             var username = $("#username").val().trim();
 
             if (username == "") {
@@ -167,7 +177,7 @@
                 data: {
                     username: username
                 },
-                success: function(response) {
+                success: function (response) {
                     $("#usernameResult").html(response);
                 }
             });

@@ -201,7 +201,7 @@ $total_pages = ceil($total_rows / $limit);
 
         <tr  >
             <td>
-                <ul class="pagination" style="margin-left: 29px;" >
+                <ul class="pagination" style="margin-left: 15px;" >
                     <?php for ($i = 1; $i <= $total_pages; $i++): ?>
                         <li><a href="?searchInput=<?= urlencode($searchInput) ?>&category=<?= urlencode($selectedCategory) ?>&page=<?= $i ?>" <?= ($i == $page) ?  : '' ?>><?= $i ?></a></li>
                     <?php endfor; ?>
@@ -222,26 +222,25 @@ $total_pages = ceil($total_rows / $limit);
 
 <script>
 
-
 edits = document.getElementsByClassName('edit');
     Array.from(edits).forEach((element) => {
         element.addEventListener("click", (e) => {
-            console.log("edit");
+            // console.log("edit");
             tr = e.target.parentNode.parentNode;
             file = tr.getElementsByTagName("td")[0].innerText;
             name = tr.getElementsByTagName("td")[1].innerText;
             email = tr.getElementsByTagName("td")[2].innerText;
             password = tr.getElementsByTagName("td")[3].innerText;
             preferences = tr.getElementsByTagName("td")[4].innerText;
-            console.log(file, name, password, email, preferences);
+            console.log(file, name, email, password, preferences);
             
             file.value = file;
-            name.value =name;
+            name.value = name;
             password.value =password;
             email.value =email;
             preferences.value =preferences;
             // user_Id.value = e.target.id;
-            console.log(e.target.id);
+            // console.log(e.target.id);
         });
     })
 
