@@ -1,7 +1,7 @@
 <?php include "insert.php" ?>
 <?php include "delete.php" ?>
-<?php include "update.php"; ?>
-<?php include "search.php" ?>
+<?php include "update_data.php"; ?>
+
 
 <html>
 
@@ -10,14 +10,6 @@
     <title>Listing Page</title>
     <link href="style.css" rel="stylesheet" type="text/css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- <link rel="stylesheet" href="//cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css">
-    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-    <script src="//cdn.datatables.net/2.2.2/js/dataTables.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            let table = new DataTable('#myTable');
-        });
-    </script> -->
     <style type="text/css">
         .heading11 {
             FONT-SIZE: 30px;
@@ -70,7 +62,12 @@
         .pagination>li:last-child>a, .pagination>li:last-child >span{
         border-bottom-right-radius:4px;
         border-top-right-radius:4px;
-        }    </style>
+        } 
+        .text-end{
+            text-align: end !important;
+            
+        }
+        </style>
 </head>
 
 <body bgcolor="#FFF8E8" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
@@ -84,88 +81,129 @@
     </table>
     <!--title END-->
     <!--body START-->
-    <table width="100%" border="0" cellspacing="10" cellpadding="5" align="center">
-        <tr id="searchForm">
-            <td align="left">
-                <div style=" color: #a75314;font-family: Verdana,Arial,Helvetica,sans-serif;font-size: 12px;">Search : </div>
-                <input type="text" size="35" id="searchInput" name="textfield" value="Autocomplete"> <select id="filter" name="category">
-                    <?php
-                    $sql = "SELECT * FROM `tbl_pref_master`";
-                    $result = mysqli_query($conn, $sql);
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        echo '<option>' . $row['preferenceName'] . '</option>';
-                    }
-                    ?>
-                </select> <input type="submit" value="Search" id="username" id="searchBtn" name="Submit">
-            </td>
-            <td align="right"><a href="add.php">ADD NEW RECORD</a></td>
+  <?php
+include "dbconnect.php";
+
+
+$searchInput = isset($_GET['searchInput']) ? mysqli_real_escape_string($conn, trim($_GET['searchInput'])) : '';
+$selectedCategory = isset($_GET['category']) ? mysqli_real_escape_string($conn, trim($_GET['category'])) : '';
+
+$limit = 5; 
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+if ($page < 1) $page = 1;
+$start = ($page - 1) * $limit;
+
+
+$sql = "SELECT u.user_Id, u.userName, u.password, u.emailAddress, u.profile_image, 
+       GROUP_CONCAT(DISTINCT p.preferenceName SEPARATOR ', ') AS preferences
+       FROM tbl_user u
+       LEFT JOIN tbl_preferences tp ON u.user_Id = tp.userId
+       LEFT JOIN tbl_pref_master p ON tp.preferenceId = p.preferenceId
+       WHERE 1";
+
+
+if (!empty($searchInput)) {
+    $sql .= " AND u.userName LIKE '%$searchInput%'";
+}
+
+
+if (!empty($selectedCategory)) {
+    $sql .= " AND p.preferenceName = '$selectedCategory'";
+}
+
+$sql .= " GROUP BY u.user_Id LIMIT $start, $limit";
+
+$result = mysqli_query($conn, $sql);
+if (!$result) {
+    die("SQL Error: " . mysqli_error($conn));
+}
+?>
+
+<!-- Search Form -->
+ <table width="100%"  border="0" cellspacing="10" cellpadding="5" align="center">
+<form method="GET">
+   <tr>
+		<td align="left"><div style=" color: #a75314;font-family: Verdana,Arial,Helvetica,sans-serif;font-size: 12px;">Search : </div>
+      <input type="text" size="35" id="searchInput" name="searchInput" value="<?= htmlspecialchars($searchInput) ?>" placeholder="Search Username"> 
+      <select id="filter" name="category">
+        <option value="">--Select Preference--</option>
+        <?php
+              $pref_sql = "SELECT DISTINCT preferenceName FROM `tbl_pref_master`";
+              $pref_result = mysqli_query($conn, $pref_sql);
+              while ($row = mysqli_fetch_assoc($pref_result)) {
+                  $selected = ($selectedCategory == $row['preferenceName']) ? "selected" : "";
+                  echo '<option value="' . $row['preferenceName'] . '" ' . $selected . '>' . $row['preferenceName'] . '</option>';
+              }
+              ?>
+      </select>
+      <input type="submit" value="Search" name="Submit"></td>
+		<td align="right"><a href="add.php">ADD NEW RECORD</a></td>
+		</tr>
+</form>
+
+<tr>
+    <td colspan="2">
+
+<table width="100%"  width="100%"  border="0" align="center" cellpadding="2" cellspacing="2" class="heading6" style="border:1px solid #FFE29F;">
+   
+<thead>
+        <tr height="25">
+            <th scope="col" width="11%" align="left" bgcolor="#FFF3D6" class="heading5">Profile Image ^</th>
+            <th scope="col" width="11%" align="left" bgcolor="#FFF3D6" class="heading5">Username ^</th>
+            <th scope="col" width="11%" align="left" bgcolor="#FFF3D6" class="heading5">Password</th>
+            <th scope="col" width="16%" align="left" bgcolor="#FFF3D6" class="heading5">Email Address</th>
+            <th scope="col" width="25%" align="left" bgcolor="#FFF3D6" class="heading5">Preferences</th>
+            <th scope="col" colspan="2" align="left" bgcolor="#FFF3D6" class="heading5">Options</th>
         </tr>
-        <tr>
-            <td colspan="2">
+    </thead>
+    <tbody>
+        <?php if (mysqli_num_rows($result) > 0): ?>
+            <?php while ($row = mysqli_fetch_assoc($result)): ?>
+                <tr bgcolor="#FFFFFF">
+                    <td align="left"><img src="<?= $row['profile_image'] ?>" width="50" height="50"   alt="Profile"></td>
+                    <td align="left"><a href="update.php?user_Id=<?= $row['user_Id'] ?>" style="color: #0A2892;" class="edit" data-bs-toggle="modal" data-bs-target="#editModal"><?= $row['userName'] ?></a></td>
+                    <td align="left"><?= $row['password'] ?></td>
+                    <td align="left"><?= $row['emailAddress'] ?></td>
+                    <td align="left"><?= $row['preferences'] ?></td>
+                    <td align="center" width="6%"><a href="#" class="delete" id="d<?= $row['user_Id'] ?>">DELETE</a></td>
+                </tr>
+            <?php endwhile; ?>
+        <?php else: ?>
+            <tr>
+                <td colspan="6" align="center">No results found.</td>
+            </tr>
+        <?php endif; ?>
+    </tbody>
+</table>
+</td>
+</tr>
+ </table>
 
-                <?php
-                include "dbconnect.php";
+<!-- Pagination -->
+<?php
+$total_query = "SELECT COUNT(DISTINCT u.user_Id) AS total FROM tbl_user u
+LEFT JOIN tbl_preferences tp ON u.user_Id = tp.userId
+LEFT JOIN tbl_pref_master p ON tp.preferenceId = p.preferenceId
+WHERE 1";
 
-                $limit = 5;
-                $page = isset($_GET['page']) ? $_GET['page'] : 1;
-                $start = ($page - 1) * $limit;
 
-                // Query to count total records
-                $count_query = "SELECT COUNT(*) AS total FROM tbl_user";
-                $count_result = mysqli_query($conn, $count_query);
-                $total_rows = mysqli_fetch_assoc($count_result)['total'];
-                $total_pages = ceil($total_rows / $limit);
+if (!empty($searchInput)) {
+    $total_query .= " AND u.userName LIKE '%$searchInput%'";
+}
+if (!empty($selectedCategory)) {
+    $total_query .= " AND p.preferenceName = '$selectedCategory'";
+}
 
-                // Fetch paginated results
-                $sql = "SELECT u.user_Id, u.userName, u.password, u.emailAddress, u.profile_image, 
-       COUNT(tp.preferenceId) AS preference_count,
-       GROUP_CONCAT(p.preferenceName SEPARATOR ', ') AS preferences
-        FROM tbl_user u
-        JOIN tbl_preferences tp ON u.user_Id = tp.userId
-        LEFT JOIN tbl_pref_master p ON tp.preferenceId = p.preferenceId
-        GROUP BY u.user_Id
-        HAVING COUNT(tp.preferenceId) >= 3
-        LIMIT $start, $limit";
+$total_result = mysqli_query($conn, $total_query);
+$total_rows = mysqli_fetch_assoc($total_result)['total'];
+$total_pages = ceil($total_rows / $limit);
+?>
 
-                $result = mysqli_query($conn, $sql);
-
-                if (!$result) {
-                    die("SQL Error: " . mysqli_error($conn));
-                }
-                ?>
-
-                <table id="myTable" width="100%" border="0" align="center" cellpadding="2" cellspacing="2" class="heading6" style="border:1px solid #FFE29F;">
-                    <thead>
-                        <tr>
-                            <th scope="col" width="11%" align="center" bgcolor="#FFF3D6" class="heading5">Profile Image</th>
-                            <th scope="col" width="11%" align="center" bgcolor="#FFF3D6" class="heading5">Username</th>
-                            <th scope="col" width="11%" align="center" bgcolor="#FFF3D6" class="heading5">Password</th>
-                            <th scope="col" width="11%" align="center" bgcolor="#FFF3D6" class="heading5">Email Address</th>
-                            <th scope="col" width="11%" align="center" bgcolor="#FFF3D6" class="heading5">Preferences</th>
-                            <th scope="col" width="11%" align="center" bgcolor="#FFF3D6" class="heading5">Options</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php while ($row = mysqli_fetch_assoc($result))
-                           echo ' <tr>
-                                <td><img src="'. $row['profile_image'] .'" width="50" height="50" alt="Profile"></td>
-                                <td><a href="add.php?user_Id='.$row['user_Id'] .' " style="color: #0A2892;" class="edit">'. $row['userName'] .'</a></td>
-                                <td>'. $row['password'] .'</td>
-                                <td>'. $row['emailAddress'] .'</td>
-                                <td>'. $row['preferences'] .'</td>
-                                <td><a href="#" class="delete" id="d'. $row['user_Id'] .'">DELETE</a></td>
-                            </tr>'
-                        
-                         ?>
-                    </tbody>
-                </table>
-
-                <!-- Pagination -->
-        <tr>
+        <tr  >
             <td>
-                <ul class="pagination">
+                <ul class="pagination" style="margin-left: 29px;" >
                     <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                        <li><a href="?page=<?= $i ?>" <?= ($i == $page) ? '"' : '' ?>><?= $i ?></a></li>
+                        <li><a href="?searchInput=<?= urlencode($searchInput) ?>&category=<?= urlencode($selectedCategory) ?>&page=<?= $i ?>" <?= ($i == $page) ?  : '' ?>><?= $i ?></a></li>
                     <?php endfor; ?>
                 </ul>
             </td>
@@ -181,7 +219,10 @@
         <!--bottom END-->
 </body>
 
+
 <script>
+
+
 edits = document.getElementsByClassName('edit');
     Array.from(edits).forEach((element) => {
         element.addEventListener("click", (e) => {
@@ -199,9 +240,8 @@ edits = document.getElementsByClassName('edit');
             password.value =password;
             email.value =email;
             preferences.value =preferences;
-            user_Id.value = e.target.id;
+            // user_Id.value = e.target.id;
             console.log(e.target.id);
-
         });
     })
 

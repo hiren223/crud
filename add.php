@@ -1,5 +1,4 @@
 <?php include "insert.php" ?>
-<?php include "update.php"; ?>
 
 <html>
 
@@ -79,6 +78,9 @@
                             </td>
                         </tr>
                         <tr>
+                            <td colspan="4" align="left"><table width="100%"  border="0" cellspacing="2" cellpadding="2">
+			(Please select minimum 3)
+        </td>
                             <td colspan="4" align="left">
                                 <form action="insert.php" id="skillsForm" method="post" onsubmit="return validatePreferences()">
                                     <?php
@@ -96,14 +98,14 @@
                                     ?>
 
 
-                                    <table width="100%" cellspacing="5" class='heading4' cellpadding="5" style="background-color: #FFF2D5;">
+                                    <table width="100%" cellspacing="2" class='heading4' cellpadding="2" style="background-color: #FFF2D5;">
                                         <tbody>
-                                            <tr>
+                                            <tr bgcolor="#FFF2D5" class="heading4">
                                                 <?php
                                                 while ($row = mysqli_fetch_assoc($result)) {
 
                                                     if ($count % $columns == 0 && $count != 0) {
-                                                        echo "</tr><tr  >";
+                                                        echo "</tr><tr>";
                                                     }
 
                                                     echo "<td width='5%' style='color: #0A2892;'><strong>&nbsp;
@@ -122,10 +124,11 @@
                                             </tr>
                                         </tbody>
                                     </table>
+                                            </td>
                                 </form>
                             </td>
                         </tr>
-                        <tr>
+                        <tr style="display: flex; justify-content:center;">
                             <td align="left">&nbsp;</td>
                             <td align="center">&nbsp;</td>
                             <td align="left"><input type="submit" name="Submit" onsubmit="return validateForm();" value="Save">&nbsp;&nbsp;
@@ -134,7 +137,6 @@
                             </td>
                         </tr>
                     </table>
-                </td>
             </tr>
         </table>
     </form>

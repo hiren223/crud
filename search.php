@@ -5,13 +5,13 @@ if (isset($_POST['textfield']) && isset($_POST['category'])) {
     $query = trim($_POST['textfield']);
     $category = $_POST['category'];
 
-    // Allowed search categories
+   
     $allowedColumns = ['userName', 'emailAddress', 'preference'];
     if (!in_array($category, $allowedColumns)) {
         die("Invalid search category.");
     }
 
-    // Searching by preference requires JOIN
+    
     if ($category == 'preference') {
         $sql = "SELECT u.profile_image, u.userName, u.emailAddress, 
                     GROUP_CONCAT(p.preferenceName SEPARATOR ', ') AS preferences
