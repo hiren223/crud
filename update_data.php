@@ -3,19 +3,9 @@
 // session_start();
 
 
-require_once "dbconnect.php";
+include "dbconnect.php";
 
-
-function sanitizeInput1($data)
-{
-  return htmlspecialchars(strip_tags(trim($data)));
-}
-
-
-function hashPassword1($password)
-{
-  return password_hash($password, PASSWORD_DEFAULT);
-}
+  $hash = password_hash($password, PASSWORD_DEFAULT);
 
 if (isset($_GET['user_Id'])) {
   $sql = "SELECT * FROM  `tbl_user` WHERE `user_id` = ".$_GET['user_Id'];
@@ -23,20 +13,32 @@ if (isset($_GET['user_Id'])) {
 
   $result = mysqli_query($conn, $sql);
     $row = mysqli_fetch_assoc($result);
+    
     $name = $row['userName'];
     $password = $row['password'];
     $cpassword = $row['confirm_password'];
     $email = $row['emailAddress'];
     $file = $row['profile_image'];
-    $pref = $row['preferenceName'];
-}
+    
+  }
 
-if (isset($_POST['Submit'])) {
+  // if (isset($_GET['user_Id'])) {
+  //   $sqlpref = "SELECT * FROM `tbl_preferences` WHERE `userId`=".$_GET['user_Id'];
+  //   $resultpref = mysqli_query($conn, $sqlpref);
+  //   $row = mysqli_fetch_assoc($resultpref);
 
-  $name = sanitizeInput1($_POST['username']);
+  //   $pref = $row['preferenceId'];
+
+  // }
+  
+
+
+if (isset($_POST['user_Id'])) {
+$user_Id = $_POST['user_Id'];
+  $name = ($_POST['name']);
   $password = $_POST['password'];
   $cpassword = $_POST['cpassword'];
-  $email = sanitizeInput1($_POST['email']);
+  $email =($_POST['email']);
   $image = $_FILES['file']['tmp_name'];
   $imagename = $_FILES['file']['name'];
   $preferenceIds = isset($_POST['preferenceName']) ? $_POST['preferenceName'] : [];
@@ -66,15 +68,17 @@ if (isset($_POST['Submit'])) {
     exit();
   }
 
-  
-  $hash = hashPassword1($password);
 
 
-  $sql = "UPDATE `tbl_user` SET `userName` = '$title', `emailAddress` = '$desc', `password`= '', `profile_image`='' WHERE `note`.`sr.no` = $srno";
+
+  $sql = "UPDATE `tbl_user` SET `userName` = '$name',  `password`= '$password', `confirm_password` = '$cpassword', `emailAddress` = '$email', `profile_image`='$destfill' WHERE `tbl_user`.`user_id` = $user_Id";
   $stmt = $conn->prepare($sql);
 
   if (!$stmt) {
     die("SQL Error: " . $conn->error);
+  }
+  else{
+    echo "success";
   }
 
  $stmt->bind_param("sssss", $name, $hash, $hash, $email, $destfill); 
@@ -84,11 +88,14 @@ if (isset($_POST['Submit'])) {
     $userId = $stmt->insert_id; 
 
   
-    $sqlPref = "UPDATE tbl_preferences SET (userId, preferenceId) VALUES (?, ?)";
+    $sqlPref = "UPDATE tbl_preferences SET `userId'='', `preferenceId`='$preferenceIds' 
+    WHERE `preid`=$user_Id";
     $stmtPref = $conn->prepare($sqlPref);
 
     if (!$stmtPref) {
       die("Preference SQL Error: " . $conn->error);
+    }else{
+      echo "success";
     }
 
     foreach ($preferenceIds as $preferenceId) {
@@ -97,15 +104,15 @@ if (isset($_POST['Submit'])) {
     }
 
     echo "<script>
-                alert('record added successfully!');
-                window.location.href='add.php';
+                alert('record update successfully!');
+                window.location.href='update.php';
               </script>";
 
     $stmtPref->close();
   } else {
     echo "<script>
-                alert('Failed to add record');
-                window.location.href='add.php';
+                alert('Failed to update record');
+                window.location.href='update.php';
               </script>";
   }
 

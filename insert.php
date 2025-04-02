@@ -23,8 +23,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $password = $_POST['password'];
   $cpassword = $_POST['cpassword'];
   $email = sanitizeInput($_POST['email']);
+
   $image = $_FILES['file']['tmp_name'];
   $imagename = $_FILES['file']['name'];
+  
   $preferenceIds = isset($_POST['preferenceName']) ? $_POST['preferenceName'] : [];
 
 

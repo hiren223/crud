@@ -1,6 +1,4 @@
-<?php include "insert.php" ?>
-<?php include "update_data.php" ?>
-
+<?php include"update_data.php"; ?>
 <html>
 
 <head>
@@ -29,7 +27,7 @@
     </table>
     <!--title END-->
     <!--body START-->
-    <form action="insert.php" method="post" enctype="multipart/form-data">
+    <form action="update.php" method="post" enctype="multipart/form-data">
         <table width="100%" border="0" cellspacing="10" cellpadding="5" align="center">
             <tr>
                 <td>
@@ -90,7 +88,7 @@
                                     (Please select minimum 3)
                             </td>
                             <td colspan="4" align="left">
-                                <form action="insert.php" id="skillsForm" method="post"
+                                <form action="update_data.php" id="skillsForm" method="post"
                                     onsubmit="return validatePreferences()">
                                     <?php
                                     include "dbconnect.php";
@@ -119,8 +117,8 @@
                                                     }
 
                                                     echo "<td width='5%' style='color: #0A2892;'><strong>&nbsp;
-                        <input value='<?php echo "($row['preferenceName'])?$row['preferenceName']:'';"?>' type='checkbox' name='preferenceName[]' value='" . $row['preferenceId'] . "' > </strong>  </td>
-                      <td width='19%'  style='font-weight: bold; '  <strong> " . $row['preferenceName'] . " </strong> </td>
+                        <input  type='checkbox' name='preferenceName[]' value='" . $row['preferenceId'] . "' > </strong>  </td>
+                      <td width='19%' value='" . $row['preferenceId'] . "'  style='font-weight: bold; '  <strong> " . $row['preferenceName'] . " </strong> </td>
                     ";
                                                     $count++;
                                                 }
@@ -163,27 +161,6 @@
 
 
 <script>
-    edits = document.getElementsByClassName('edit');
-    Array.from(edits).forEach((element) => {
-        element.addEventListener("click", (e) => {
-            // console.log("edit");
-            tr = e.target.parentNode.parentNode;
-            file = tr.getElementsByTagName("td")[0].innerText;
-            name = tr.getElementsByTagName("td")[1].innerText;
-            email = tr.getElementsByTagName("td")[2].innerText;
-            password = tr.getElementsByTagName("td")[3].innerText;
-            preferences = tr.getElementsByTagName("td")[4].innerText;
-            console.log(file, name, email, password, preferences);
-
-            file.value = file;
-            name.value = name;
-            password.value = password;
-            email.value = email;
-            preferences.value = preferences;
-            // user_Id.value = e.target.id;
-            // console.log(e.target.id);
-        });
-    })
 
     $(document).ready(function () {
         $("#checkAvailability").click(function () {
@@ -230,3 +207,4 @@
 
 
 </html>
+

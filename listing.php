@@ -222,28 +222,6 @@ $total_pages = ceil($total_rows / $limit);
 
 <script>
 
-edits = document.getElementsByClassName('edit');
-    Array.from(edits).forEach((element) => {
-        element.addEventListener("click", (e) => {
-            // console.log("edit");
-            tr = e.target.parentNode.parentNode;
-            file = tr.getElementsByTagName("td")[0].innerText;
-            name = tr.getElementsByTagName("td")[1].innerText;
-            email = tr.getElementsByTagName("td")[2].innerText;
-            password = tr.getElementsByTagName("td")[3].innerText;
-            preferences = tr.getElementsByTagName("td")[4].innerText;
-            console.log(file, name, email, password, preferences);
-            
-            file.value = file;
-            name.value = name;
-            password.value =password;
-            email.value =email;
-            preferences.value =preferences;
-            // user_Id.value = e.target.id;
-            // console.log(e.target.id);
-        });
-    })
-
     deletes = document.getElementsByClassName('delete');
     Array.from(deletes).forEach((element) => {
         element.addEventListener("click", (e) => {
